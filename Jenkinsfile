@@ -135,7 +135,13 @@ pipeline {
 			}
 		}
 
-		 stage('Checkout') {
+	
+		
+		 
+    }
+	agent any 
+	stages{
+			 stage('Checkout') {
             steps {
                 git branch: 'main', url: 'https://github.com/jacksonhooi/lab7b.git'
 			
@@ -151,9 +157,7 @@ pipeline {
                 }
             }
         }
-		
-		 
-    }
+	}
     post {
         always {
             recordIssues(enabledForFailure: true, tools: [sonarQube()])
