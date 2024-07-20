@@ -102,7 +102,7 @@
 
 // combine
 pipeline {
-    agent any
+    agent none
     stages {
        
 			stage('Integration UI Test') {
@@ -134,7 +134,7 @@ pipeline {
 				}
 			}
 		}
-		
+
 		 stage('Checkout') {
             steps {
                 git branch: 'main', url: 'https://github.com/jacksonhooi/lab7b.git'
