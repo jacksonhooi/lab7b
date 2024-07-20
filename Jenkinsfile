@@ -35,66 +35,66 @@
 // }
 
 //lab 8 
-// pipeline {
-//     agent any
-
-//     stages {
-//         stage('Checkout') {
-//             steps {
-//                 git branch: 'master', url: 'https://github.com/ScaleSec/vulnado.git'
-//             }
-//         }
-
-//         stage('Build') {
-//             steps {
-//                 sh '/var/jenkins_home/apache-maven-3.6.3/bin/mvn --batch-mode -V -U -e clean verify -Dsurefire.useFile=false -Dmaven.test.failure.ignore'
-//             }
-//         }
-
-//         stage('Analysis') {
-//             steps {
-//                 sh '/var/jenkins_home/apache-maven-3.6.3/bin/mvn --batch-mode -V -U -e checkstyle:checkstyle pmd:pmd pmd:cpd findbugs:findbugs'
-//             }
-//         }
-//     }
-
-//     post {
-//         always {
-//             junit testResults: '**/target/surefire-reports/TEST-*.xml'
-//             recordIssues enabledForFailure: true, tools: [mavenConsole(), java(), javaDoc(), checkStyle()]
-//             recordIssues enabledForFailure: true, tools: [spotBugs(pattern: '**/target/findbugsXml.xml')]
-//             recordIssues enabledForFailure: true, tools: [cpd(pattern: '**/target/cpd.xml')]
-//             recordIssues enabledForFailure: true, tools: [pmdParser(pattern: '**/target/pmd.xml')]
-//         }
-//     }
-// }
-
-// lab 9
 pipeline {
     agent any
+
     stages {
         stage('Checkout') {
             steps {
                 git branch: 'master', url: 'https://github.com/jacksonhooi/lab7b.git'
             }
         }
-        stage('Code Quality Check via SonarQube') {
+
+        stage('Build') {
             steps {
-                script {
-                    def scannerHome = tool 'SonarQube'
-                    withSonarQubeEnv('SonarQube') {
-                        sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=lab7 -Dsonar.sources=."
-                    }
-                }
+                sh '/var/jenkins_home/apache-maven-3.6.3/bin/mvn --batch-mode -V -U -e clean verify -Dsurefire.useFile=false -Dmaven.test.failure.ignore'
+            }
+        }
+
+        stage('Analysis') {
+            steps {
+                sh '/var/jenkins_home/apache-maven-3.6.3/bin/mvn --batch-mode -V -U -e checkstyle:checkstyle pmd:pmd pmd:cpd findbugs:findbugs'
             }
         }
     }
+
     post {
         always {
-            recordIssues(enabledForFailure: true, tools: [sonarQube()])
+            junit testResults: '**/target/surefire-reports/TEST-*.xml'
+            recordIssues enabledForFailure: true, tools: [mavenConsole(), java(), javaDoc(), checkStyle()]
+            recordIssues enabledForFailure: true, tools: [spotBugs(pattern: '**/target/findbugsXml.xml')]
+            recordIssues enabledForFailure: true, tools: [cpd(pattern: '**/target/cpd.xml')]
+            recordIssues enabledForFailure: true, tools: [pmdParser(pattern: '**/target/pmd.xml')]
         }
     }
 }
+
+// lab 9
+// pipeline {
+//     agent any
+//     stages {
+//         stage('Checkout') {
+//             steps {
+//                 git branch: 'master', url: 'https://github.com/jacksonhooi/lab7b.git'
+//             }
+//         }
+//         stage('Code Quality Check via SonarQube') {
+//             steps {
+//                 script {
+//                     def scannerHome = tool 'SonarQube'
+//                     withSonarQubeEnv('SonarQube') {
+//                         sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=lab7 -Dsonar.sources=."
+//                     }
+//                 }
+//             }
+//         }
+//     }
+//     post {
+//         always {
+//             recordIssues(enabledForFailure: true, tools: [sonarQube()])
+//         }
+//     }
+// }
 
 
 // combine
@@ -104,8 +104,6 @@ pipeline {
 //         stage('Checkout') {
 //             steps {
 //                 git branch: 'master', url: 'https://github.com/jacksonhooi/lab7b.git'
-// 				git branch:'master', url: 'https://github.com/OWASP/Vulnerable-Web-Application.git'
-// 				git branch: 'master', url: 'https://github.com/ScaleSec/vulnado.git'
 			
 //             }
 //         }
