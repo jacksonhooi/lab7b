@@ -104,14 +104,18 @@
 pipeline {
     agent any
     stages {
-        stage('Checkout') {
-            steps {
-                git branch: 'main', url: 'https://github.com/jacksonhooi/lab7b.git'
-			
-            }
-        }
-		
-				stage('UI Test') {
+       
+			stage('Integration UI Test') {
+			parallel {
+				stage('Deploy') {
+					agent any
+					steps {
+						sh './jenkins/scripts/deploy.sh'
+						input message: 'Finished using the web site? (Click "Proceed" to continue)'
+						sh './jenkins/scripts/kill.sh'
+					}
+				}
+				stage('Headless Browser Test') {
 					agent {
 						docker {
 							image 'maven:3-alpine' 
@@ -128,8 +132,15 @@ pipeline {
 						}
 					}
 				}
-			
+			}
+		}
 		
+		 stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/jacksonhooi/lab7b.git'
+			
+            }
+        }
         stage('Code Quality Check via SonarQube') {
             steps {
                 script {
