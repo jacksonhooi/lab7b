@@ -1,6 +1,6 @@
 //lab 7b
 pipeline {
-	agent any
+	agent none
 	
 	stages {
 		
