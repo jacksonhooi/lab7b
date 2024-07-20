@@ -102,7 +102,7 @@
 
 // combine
 pipeline {
-    agent none
+    agent any
     stages {
        
 			stage('Integration UI Test') {
@@ -139,7 +139,7 @@ pipeline {
 		
 		 
     }
-	agent any 
+	
 	stages{
 			 stage('Checkout') {
             steps {
