@@ -1,13 +1,14 @@
 //lab 7b
 pipeline {
 	agent any
-	 stage('Checkout') {
+	
+	stages {
+		 stage('Checkout') {
             steps {
                 git branch: 'main', url: 'https://github.com/jacksonhooi/lab7b.git'
 			
             }
         }
-	stages {
 		stage('Integration UI Test') {
 			parallel {
 				stage('Deploy') {
