@@ -132,6 +132,12 @@ pipeline {
             }
         }
 
+        stage('Build') {
+            steps {
+                sh '/var/jenkins_home/apache-maven-3.6.3/bin/mvn --batch-mode -V -U -e clean verify -Dsurefire.useFile=false -Dmaven.test.failure.ignore'
+            }
+        }
+
         stage('Integration UI Test') {
             parallel {
                 stage('Deploy') {
@@ -165,10 +171,21 @@ pipeline {
 
     post {
         always {
-            recordIssues(enabledForFailure: true, tools: [sonarQube()])
+            junit testResults: '**/target/surefire-reports/TEST-*.xml'
+            recordIssues enabledForFailure: true, tools: [
+                sonarQube(),
+                mavenConsole(),
+                java(),
+                javaDoc(),
+                checkStyle(),
+                spotBugs(pattern: '**/target/findbugsXml.xml'),
+                cpd(pattern: '**/target/cpd.xml'),
+                pmdParser(pattern: '**/target/pmd.xml')
+            ]
         }
         success {
             dependencyCheckPublisher pattern: 'dependency-check-report.xml'
         }
     }
 }
+
