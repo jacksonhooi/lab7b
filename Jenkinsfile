@@ -104,8 +104,9 @@ pipeline {
         stage('Checkout') {
             steps {
                 git branch: 'master', url: 'https://github.com/jacksonhooi/lab7b.git'
-				git branch: 'master', url: 'https://github.com/ScaleSec/vulnado.git'
 				git branch:'master', url: 'https://github.com/OWASP/Vulnerable-Web-Application.git'
+				git branch: 'master', url: 'https://github.com/ScaleSec/vulnado.git'
+			
             }
         }
 		stage('Build') {
