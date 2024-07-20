@@ -107,17 +107,6 @@ pipeline {
 			
             }
         }
-		
-        stage('Code Quality Check via SonarQube') {
-            steps {
-                script {
-                    def scannerHome = tool 'SonarQube'
-                    withSonarQubeEnv('Testing') {
-                        sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=Testing -Dsonar.sources=."
-                    }
-                }
-            }
-        }
 		stage('Integration UI Test') {
 			parallel {
 				stage('Deploy') {
@@ -147,6 +136,18 @@ pipeline {
 				}
 			}
 		}
+		
+        stage('Code Quality Check via SonarQube') {
+            steps {
+                script {
+                    def scannerHome = tool 'SonarQube'
+                    withSonarQubeEnv('Testing') {
+                        sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=Testing -Dsonar.sources=."
+                    }
+                }
+            }
+        }
+		
 		 
     }
     post {
