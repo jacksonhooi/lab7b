@@ -75,7 +75,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'master', url: 'https://github.com/OWASP/Vulnerable-Web-Application.git'
+                git branch: 'main', url: 'https://github.com/jacksonhooi/lab7b.git'
             }
         }
         stage('Code Quality Check via SonarQube') {
@@ -83,7 +83,7 @@ pipeline {
                 script {
                     def scannerHome = tool 'SonarQube'
                     withSonarQubeEnv('SonarQube') {
-                        sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=OWASP -Dsonar.sources=."
+                        sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=lab7b -Dsonar.sources=."
                     }
                 }
             }
